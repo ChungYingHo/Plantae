@@ -1,0 +1,14 @@
+.mask {
+  background: url('/plantae/index.jpg') no-repeat top center;
+  background-size: cover;
+  -webkit-mask: url('/plantae/logo.png') no-repeat center center;
+  mask: url('/plantae/logo.png') no-repeat center center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  width: 16rem;
+  height: 16rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
