@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import MainPage from './components/main/MainPage'
+import Article from './components/articles/Article'
 
 const numShadows = 700
 
@@ -37,19 +38,19 @@ export default function Home() {
   }
 
   return (
-    <main className="text-foreground-800 w-screen overflow-y-scroll bg-slate-50 2xl:h-[calc(100vh-4rem)] 2xl:snap-y 2xl:snap-mandatory">
-      <div className="flex w-full items-center justify-center bg-slate-50 px-8 xl:min-h-[calc(100vh-4rem)] xl:px-24 2xl:h-[calc(100vh-4rem)] 2xl:snap-center 2xl:px-48">
+    <main className="w-screen overflow-y-scroll bg-slate-50 text-foreground-800 2xl:h-[calc(100vh-4rem)] 2xl:snap-y 2xl:snap-mandatory">
+      <div className="flex min-h-[calc(100vh-4rem)] w-full items-center justify-center bg-slate-50 px-8 xl:px-24 2xl:h-[calc(100vh-4rem)] 2xl:snap-center 2xl:px-48">
         <div
           ref={particleRef}
-          className="animate-star absolute left-0 top-0 h-[1.5px] w-[1.5px] rounded-full bg-transparent"
+          className="absolute left-0 top-0 h-[1.5px] w-[1.5px] animate-star rounded-full bg-transparent"
         />
         <MainPage scrollToSecondDiv={scrollToSecondDiv} />
       </div>
       <div
         ref={secondDivRef}
-        className="my-7 flex w-full items-center bg-gray-600 px-8 xl:px-24 2xl:my-0 2xl:h-[200vh] 2xl:snap-start 2xl:px-48"
+        className="my-7 flex min-h-[calc(100vh-4rem)] w-full items-center bg-slate-50 px-8 xl:px-24 2xl:my-0 2xl:snap-start 2xl:px-48"
       >
-        <p>2</p>
+        <Article />
       </div>
     </main>
   )

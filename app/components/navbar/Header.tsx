@@ -40,7 +40,7 @@ export default function Header() {
         <NavbarBrand>
           {/* <Logo /> */}
           <Image src="/plantae/logo.png" alt="PLANTAE" width={36} height={36} />
-          <p className="text-foreground ml-1 font-bold">PLANTAE Taiwan</p>
+          <p className="ml-1 font-bold text-foreground">PLANTAE Taiwan</p>
         </NavbarBrand>
       </NavbarContent>
 
@@ -52,7 +52,7 @@ export default function Header() {
         </NavbarItem>
         <NavbarItem>
           <Link
-            href="/portfolio"
+            href="/store"
             aria-current="page"
             color={pathname === '/store' ? 'secondary' : 'foreground'}
           >
