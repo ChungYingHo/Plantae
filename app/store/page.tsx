@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Card,
   CardHeader,
@@ -10,47 +12,59 @@ import {
   Input,
   Button
 } from '@nextui-org/react'
+import { useState, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { addToCart } from '@/lib/features/cart/cartSlice'
+
+const products = [
+  {
+    name: '黑香芒果',
+    producer: '何春龍',
+    area: '六甲區',
+    color: 'success',
+    img: '/product/black_mango.jpg',
+    description: 'This is the brand image website of PLANTAE Taiwan.',
+    unit: '10 斤/箱',
+    price: 500
+  },
+  {
+    name: '愛文芒果',
+    producer: '何春龍',
+    area: '六甲區',
+    color: 'danger',
+    img: '/product/love_mango.jpg',
+    description: 'This is the brand image website of PLANTAE Taiwan.',
+    unit: '10 斤/箱',
+    price: 600
+  }
+]
 
 const Page = () => {
-  // const { isOpen, onOpen, onClose } = useDisclosure()
-  // const size = 'md'
+  const dispatch = useAppDispatch()
+  const cart = useAppSelector((state) => state.cart.items)
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({})
 
-  // const handleOpen = () => {
-  //   onOpen()
-  // }
+  const handleQuantityChange = (name: string, quantity: number) => {
+    setQuantities({
+      ...quantities,
+      [name]: quantity
+    })
+  }
 
-  const products = [
-    {
-      name: '黑香芒果',
-      producer: '何春龍',
-      area: '六甲區',
-      color: 'success',
-      img: '/product/black_mango.jpg',
-      description: 'This is the brand image website of PLANTAE Taiwan.',
-      unit: '10 斤/箱',
-      price: 500
-    },
-    {
-      name: '愛文芒果',
-      producer: '何春龍',
-      area: '六甲區',
-      color: 'danger',
-      img: '/product/love_mango.jpg',
-      description: 'This is the brand image website of PLANTAE Taiwan.',
-      unit: '10 斤/箱',
-      price: 600
+  const handleAddToCart = (name: string, unit: string) => {
+    const quantity = quantities[name] || 0
+    if (quantity <= 0) {
+      alert('請輸入數量')
+      return
     }
-    // {
-    //   name: '綠香芒果',
-    //   producer: '何春龍',
-    //   area: '六甲區',
-    //   color: 'danger',
-    //   img: '/product/dry_mango.jpg',
-    //   description: 'This is the brand image website of PLANTAE Taiwan.',
-    //   unit: '10 斤/箱',
-    //   price: 500
-    // }
-  ]
+    dispatch(addToCart({ name, quantity, unit }))
+    console.log('addToCart:', { name, quantity, unit })
+  }
+
+  useEffect(() => {
+    console.log('cart:', cart)
+  }, [cart])
+
   return (
     <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-wrap gap-5 overflow-y-scroll bg-slate-50 px-8 py-5 text-foreground-800 xl:px-24 2xl:px-48">
       {products.map((product, index) => (
@@ -84,8 +98,17 @@ const Page = () => {
               labelPlacement="outside"
               min="0"
               className="w-2/3"
+              value={(quantities[product.name] || 0).toString()} // Convert the number value to a string
+              onChange={(e) =>
+                handleQuantityChange(product.name, parseInt(e.target.value))
+              }
             />
-            <Button color="secondary" className="w-1/3" variant="ghost">
+            <Button
+              color="secondary"
+              className="w-1/3"
+              variant="ghost"
+              onPress={() => handleAddToCart(product.name, product.unit)}
+            >
               加入購物車
             </Button>
           </CardFooter>

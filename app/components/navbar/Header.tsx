@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Navbar,
@@ -10,7 +11,6 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Link,
   Button,
   Image
 } from '@nextui-org/react'
@@ -46,7 +46,10 @@ export default function Header() {
 
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         <NavbarItem>
-          <Link color={pathname === '/' ? 'secondary' : 'foreground'} href="/">
+          <Link
+            className={`${pathname === '/' ? 'text-lime-500' : 'text-foreground'}`}
+            href="/"
+          >
             主頁
           </Link>
         </NavbarItem>
@@ -54,23 +57,23 @@ export default function Header() {
           <Link
             href="/store"
             aria-current="page"
-            color={pathname === '/store' ? 'secondary' : 'foreground'}
+            className={`${pathname === '/store' ? 'text-lime-500' : 'text-foreground'}`}
           >
             商場
           </Link>
         </NavbarItem>
         <NavbarItem>
           <Link
-            color={pathname === '/shopping_cart' ? 'secondary' : 'foreground'}
             href="/shopping_cart"
+            className={`${pathname === '/shopping_cart' ? 'text-lime-500' : 'text-foreground'}`}
           >
             購物車
           </Link>
         </NavbarItem>
         <NavbarItem>
           <Link
-            color={pathname === '/order_info' ? 'secondary' : 'foreground'}
             href="/order_info"
+            className={`${pathname === '/order_info' ? 'text-lime-500' : 'text-foreground'}`}
           >
             訂單查詢
           </Link>
@@ -107,7 +110,7 @@ export default function Header() {
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.name}-${index}`}>
-            <Link color="primary" className="w-full" href={item.href} size="lg">
+            <Link color="primary" className="w-full" href={item.href}>
               {item.name}
             </Link>
           </NavbarMenuItem>

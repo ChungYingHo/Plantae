@@ -4,6 +4,7 @@ import './globals.css'
 // app/layout.tsx
 import { Providers } from './providers'
 import Header from './components/navbar/Header'
+import StoreProvider from './StoreProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,10 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden light">
       <body>
-        <Providers>
-          <Header />
-          {children}
-        </Providers>
+        <StoreProvider>
+          <Providers>
+            <Header />
+            {children}
+          </Providers>
+        </StoreProvider>
       </body>
     </html>
   )
