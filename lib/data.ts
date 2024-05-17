@@ -71,6 +71,7 @@ export async function getSearchData(orderCode: string) {
     // 撈取訂單資料
     const { rows: order } = await sql`
       SELECT
+        orders.id,
         orders.order_code,
         orders.status,
         orders.tracking_number,
@@ -81,7 +82,7 @@ export async function getSearchData(orderCode: string) {
         users.email,
         users.address
       FROM orders
-      JOIN users ON orders.user_id = users.id
+      JOIN users ON orders.users_id = users.id
       WHERE orders.order_code = ${orderCode}
     `
     const userInfo = order[0]
