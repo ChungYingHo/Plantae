@@ -1,16 +1,21 @@
 'use client'
 
+import Link from 'next/link'
 import {
   Card,
   CardHeader,
   CardBody,
   Divider,
-  Link,
   CardFooter,
   Image,
-  Chip,
   Input,
-  Button
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure
 } from '@nextui-org/react'
 import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
@@ -40,9 +45,12 @@ const products = [
 ]
 
 const Page = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const dispatch = useAppDispatch()
   const cart = useAppSelector((state) => state.cart.items)
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({})
+  const [displayMsg, setDisplayMsg] = useState('')
+  const [isDisabled, setIsDisabled] = useState(false)
 
   const handleQuantityChange = (name: string, quantity: number) => {
     setQuantities({
@@ -54,11 +62,15 @@ const Page = () => {
   const handleAddToCart = (name: string, unit: string) => {
     const quantity = quantities[name] || 0
     if (quantity <= 0) {
-      alert('請輸入數量')
-      return
+      setDisplayMsg('請輸入數量')
+      setIsDisabled(true)
+    } else {
+      setDisplayMsg('加入購物車成功')
+      setIsDisabled(false)
     }
     dispatch(addToCart({ name, quantity, unit }))
     console.log('addToCart:', { name, quantity, unit })
+    onOpen()
   }
 
   useEffect(() => {
@@ -114,6 +126,32 @@ const Page = () => {
           </CardFooter>
         </Card>
       ))}
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Modal Title
+              </ModalHeader>
+              <ModalBody>
+                <p>{displayMsg}</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  取消
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={onClose}
+                  isDisabled={isDisabled}
+                >
+                  <Link href="/shopping_cart">前往購物車</Link>
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </main>
   )
 }

@@ -1,19 +1,39 @@
 'use client'
 
+import Link from 'next/link'
 import {
   Card,
   CardHeader,
   CardBody,
   Divider,
-  Link,
   CardFooter,
   Input,
   Button,
-  Textarea
+  Textarea,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure
 } from '@nextui-org/react'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { updateQuantity, removeFromCart } from '@/lib/features/cart/cartSlice'
+
+const generateUavCode = (): string => {
+  const today = new Date()
+  const dateStr = today.toISOString().split('T')[0].replace(/-/g, '') // 將日期格式化為YYYYMMDD
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let randomStr = ''
+  for (let i = 0; i < 3; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length)
+
+    randomStr += chars[randomIndex]
+  }
+
+  return `plantae${dateStr}-${randomStr}`
+}
 
 const Page = () => {
   const [name, setName] = useState('')
@@ -27,10 +47,65 @@ const Page = () => {
   const cart = useAppSelector((state) => state.cart.items)
   console.log(cart)
 
-  const handleSubmit = () => {
-    alert(
-      `${cart[0].name} has been ordered! Amount: ${cart[0].quantity}! ${name}! ${phone}! ${email}! ${address}! ${payment}! ${note}!`
-    )
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const [displayMsg, setDisplayMsg] = useState('')
+  const [isDisabled, setIsDisabled] = useState(false)
+  const [isCancelDisabled, setIsCancelDisabled] = useState(false)
+
+  const handleSubmit = (step: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // 驗證email格式
+    setIsCancelDisabled(false)
+
+    // check modal
+    if (step === 'check') {
+      if (
+        name.trim().length < 2 ||
+        phone.trim().length < 7 ||
+        !address ||
+        !payment ||
+        (!emailRegex.test(email.trim()) && email.trim().length > 0)
+      ) {
+        console.log('請填寫完整資料')
+        console.log(
+          name.trim().length,
+          phone.trim().length,
+          emailRegex.test(email.trim()),
+          address,
+          payment
+        )
+        setDisplayMsg('請填寫完整資料')
+        setIsDisabled(true)
+        onOpen()
+        return
+      } else {
+        console.log('確認資料')
+        setDisplayMsg(
+          `姓名: ${name}\n電話: ${phone}\nEmail: ${email}\n地址: ${address}\n匯款後五碼: ${payment}\n備註: ${note}`
+        )
+        setIsDisabled(false)
+        onOpen()
+        return
+      }
+    }
+
+    // submit
+    if (step === 'submit') {
+      // 生成訂單編號
+      const orderCode = generateUavCode()
+
+      const outputData = {
+        name: name,
+        phone: phone,
+        email: email,
+        address: address,
+        payment: payment,
+        note: note,
+        orderCode: orderCode
+      }
+      // api will be here
+      setDisplayMsg('訂單已送出')
+      setIsCancelDisabled(true)
+    }
   }
 
   return (
@@ -154,9 +229,59 @@ const Page = () => {
         </CardBody>
         <Divider />
         <CardFooter className="flex justify-end">
-          <Button color="success" onClick={handleSubmit}>
-            送出訂單
+          <Button
+            color="secondary"
+            onClick={() => handleSubmit('check')}
+            isDisabled={cart.length === 0}
+          >
+            確認訂單
           </Button>
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg">
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    <h2 className="text-lg font-bold">確認資料</h2>
+                    <p className="text-sm text-foreground-500">
+                      請確認以下資料是否正確
+                    </p>
+                  </ModalHeader>
+                  <Divider />
+                  <ModalBody>
+                    <p className="mb-2">
+                      {displayMsg.split('\n').map((line, index) => (
+                        <span key={index}>
+                          {line}
+                          <br />
+                        </span>
+                      ))}
+                    </p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={onClose}
+                      isDisabled={isCancelDisabled}
+                    >
+                      取消
+                    </Button>
+                    <Button
+                      color="success"
+                      onPress={
+                        isCancelDisabled
+                          ? onClose
+                          : () => handleSubmit('submit')
+                      }
+                      isDisabled={isDisabled}
+                    >
+                      {isCancelDisabled ? '確認' : '確認送出'}
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
         </CardFooter>
       </Card>
     </main>

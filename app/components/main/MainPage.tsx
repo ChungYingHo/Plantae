@@ -31,7 +31,7 @@ const MainPage = ({ scrollToSecondDiv }: MainPageProps) => {
           <path
             d="M6 10L12 16L18 10"
             stroke="currentColor"
-            stroke-width="2"
+            strokeWidth="2"
             fill="none"
           />
         </svg>
