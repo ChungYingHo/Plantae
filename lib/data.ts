@@ -116,16 +116,30 @@ export async function getAllOrderData() {
   try {
     const { rows: orders } = await sql`
     SELECT
-      orders.*,
-      users.*,
+      orders.id AS order_id,
+      orders.users_id,
+      orders.order_code,
+      orders.total_price,
+      orders.status,
+      orders.delivery_time,
+      orders.expect_delivery_time,
+      orders.tracking_number,
+      orders.note,
+      orders.created_at AS order_created_at,
+      users.id AS user_id,
+      users.name AS user_name,
+      users.address AS user_address,
+      users.phone AS user_phone,
+      users.email AS user_email,
+      users.payment AS user_payment,
       array_agg(products.name) AS product_names,
       array_agg(products.unit) AS product_units,
-      array_agg(order_details.quantity) AS product_quantities,
+      array_agg(order_details.quantity) AS product_quantities
     FROM orders
     JOIN users ON orders.users_id = users.id
     JOIN order_details ON orders.id = order_details.order_id
     JOIN products ON order_details.product_id = products.id
-    GROUP BY orders.id
+    GROUP BY orders.id, users.id
     ORDER BY orders.created_at ASC
     `
 
@@ -161,33 +175,34 @@ export async function updateStatus(data: any) {
 // delete the order data from the database
 export async function deleteOrderData(orderId: number) {
   try {
-    // 刪除訂單
-    await sql`
-      DELETE FROM orders
-      WHERE order_id = ${orderId}
-    `
     // 刪除訂單明細
     await sql`
       DELETE FROM order_details
+      WHERE order_id = ${orderId}
+    `
+
+    // 刪除訂單
+    await sql`
+      DELETE FROM orders
       WHERE id = ${orderId}
     `
 
-    // 判斷是否刪除用戶
+    // 檢查是否還有其他訂單使用相同的使用者
     const { rowCount } = await sql`
       SELECT COUNT(*)
       FROM orders
-      WHERE user_id = ${orderId} = (SELECT user_id FROM orders WHERE id = ${orderId})
+      WHERE users_id = (SELECT users_id FROM orders WHERE id = ${orderId})
     `
+
+    // 如果沒有其他訂單使用相同的使用者，則刪除使用者
     if (rowCount === 0) {
       await sql`
         DELETE FROM users
-        WHERE id = (SELECT user_id FROM orders WHERE id = ${orderId})
+        WHERE id = (SELECT users_id FROM orders WHERE id = ${orderId})
       `
     }
 
-    const response = 'success'
-
-    return response
+    return 'success'
   } catch (error) {
     console.error('Delete order error', error)
     throw new Error('Delete order error')
