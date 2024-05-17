@@ -109,9 +109,9 @@ export async function getAllOrderData() {
     SELECT
       orders.*,
       users.*,
-      array_agg(p.name) AS product_names,
-      array_agg(p.unit) AS product_units,
-      array_agg(od.quantity) AS product_quantities,
+      array_agg(products.name) AS product_names,
+      array_agg(products.unit) AS product_units,
+      array_agg(order_details.quantity) AS product_quantities,
     FROM orders
     JOIN users ON orders.users_id = users.id
     JOIN order_details ON orders.id = order_details.order_id

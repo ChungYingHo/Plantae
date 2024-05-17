@@ -15,11 +15,13 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  useDisclosure
+  useDisclosure,
+  Snippet
 } from '@nextui-org/react'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { updateQuantity, removeFromCart } from '@/lib/features/cart/cartSlice'
+import { postOrderData } from '@/lib/data'
 
 const generateUavCode = (): string => {
   const today = new Date()
@@ -42,6 +44,7 @@ const Page = () => {
   const [address, setAddress] = useState('')
   const [payment, setPayment] = useState('')
   const [note, setNote] = useState('')
+  const [displayOrderCode, setDisplayOrderCode] = useState('')
 
   const dispatch = useAppDispatch()
   const cart = useAppSelector((state) => state.cart.items)
@@ -51,10 +54,12 @@ const Page = () => {
   const [displayMsg, setDisplayMsg] = useState('')
   const [isDisabled, setIsDisabled] = useState(false)
   const [isCancelDisabled, setIsCancelDisabled] = useState(false)
+  const [isSubmitSuccess, setIsSubmitSuccess] = useState(false)
 
-  const handleSubmit = (step: string) => {
+  const handleSubmit = async (step: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // 驗證email格式
     setIsCancelDisabled(false)
+    setIsSubmitSuccess(false)
 
     // check modal
     if (step === 'check') {
@@ -92,6 +97,7 @@ const Page = () => {
     if (step === 'submit') {
       // 生成訂單編號
       const orderCode = generateUavCode()
+      setDisplayOrderCode(orderCode)
 
       const outputData = {
         name: name,
@@ -105,7 +111,17 @@ const Page = () => {
         items: cart
       }
       // api will be here
-      setDisplayMsg('訂單已送出')
+      try {
+        const response = await postOrderData(outputData)
+        console.log('postOrderData response', response)
+        setIsSubmitSuccess(true)
+        setDisplayMsg('訂單已送出')
+      } catch (error) {
+        console.error('postOrderData error', error)
+        setIsSubmitSuccess(false)
+        setDisplayMsg('訂單送出失敗，請聯繫我們')
+      }
+
       setIsCancelDisabled(true)
     }
   }
@@ -253,14 +269,18 @@ const Page = () => {
                   </ModalHeader>
                   <Divider />
                   <ModalBody>
-                    <p className="mb-2">
-                      {displayMsg.split('\n').map((line, index) => (
-                        <span key={index}>
-                          {line}
-                          <br />
-                        </span>
-                      ))}
-                    </p>
+                    {isSubmitSuccess ? (
+                      <Snippet hideSymbol>{displayOrderCode}</Snippet>
+                    ) : (
+                      <p className="mb-2">
+                        {displayMsg.split('\n').map((line, index) => (
+                          <span key={index}>
+                            {line}
+                            <br />
+                          </span>
+                        ))}
+                      </p>
+                    )}
                   </ModalBody>
                   <ModalFooter>
                     <Button
