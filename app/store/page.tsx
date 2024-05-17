@@ -30,7 +30,7 @@ const products = [
     img: '/product/black_mango.jpg',
     description: 'This is the brand image website of PLANTAE Taiwan.',
     unit: '10 斤/箱',
-    price: 500
+    price: '600 (含運費)'
   },
   {
     name: '愛文芒果',
@@ -40,7 +40,7 @@ const products = [
     img: '/product/love_mango.jpg',
     description: 'This is the brand image website of PLANTAE Taiwan.',
     unit: '10 斤/箱',
-    price: 600
+    price: '600 (含運費)'
   }
 ]
 
@@ -100,7 +100,7 @@ const Page = () => {
             <p className="text-sm text-slate-500">生產者: {product.producer}</p>
             <p className="text-sm text-slate-500">產地: {product.area}</p>
             <p className="text-sm text-slate-500">單位: {product.unit}</p>
-            <p className="text-sm text-slate-500">價格: {product.price} 元</p>
+            <p className="text-sm text-slate-500">價格: {product.price}</p>
           </CardBody>
           <CardFooter className="flex items-end justify-between gap-5">
             <Input

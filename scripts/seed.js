@@ -1,4 +1,4 @@
-import { db } from '@vercel/postgres'
+const { db } = require('@vercel/postgres')
 
 async function clearTables(client) {
   try {
@@ -97,7 +97,7 @@ async function insertProducts(client) {
         INSERT INTO products (name, unit, price)
         VALUES ($1, $2, $3);
       `,
-      [product.name, units.name, units.price]
+      [product.name, product.units.name, product.units.price]
     )
   }
 
