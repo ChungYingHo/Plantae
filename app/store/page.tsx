@@ -141,9 +141,10 @@ const Page = () => {
                   取消
                 </Button>
                 <Button
-                  color="primary"
+                  color="secondary"
                   onPress={onClose}
                   isDisabled={isDisabled}
+                  variant="ghost"
                 >
                   <Link href="/shopping_cart">前往購物車</Link>
                 </Button>

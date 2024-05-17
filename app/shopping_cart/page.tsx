@@ -127,6 +127,7 @@ const Page = () => {
                     <Input
                       type="number"
                       label="數量"
+                      variant="faded"
                       value={item.quantity.toString()}
                       onChange={(e) => {
                         const quantity = parseInt(e.target.value)
