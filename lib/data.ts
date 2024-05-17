@@ -1,3 +1,5 @@
+'use server'
+
 import { sql } from '@vercel/postgres'
 
 // post the form data to the database
@@ -6,14 +8,15 @@ export async function postOrderData(data: any) {
     let userId
     // 檢查用戶是否已經存在
     const { rows: users } = await sql`
-    SELECT id
-    FROM users
-    WHERE name = ${data.name}
-    AND address = ${data.address}
-    AND phone = ${data.phone}
-    AND email = ${data.email}
-    AND payment = ${data.payment}
-  `
+      SELECT id
+      FROM users
+      WHERE name = ${data.name}
+      AND address = ${data.address}
+      AND phone = ${data.phone}
+      AND email = ${data.email}
+      AND payment = ${data.payment}
+    `
+    console.log('users', users)
 
     if (users.length > 0) {
       userId = users[0].id
@@ -28,10 +31,13 @@ export async function postOrderData(data: any) {
 
     // 創建訂單
     const { rows: order } = await sql`
-      INSERT INTO orders (user_id, order_code, total_price, note)
+      INSERT INTO orders (users_id, order_code, total_price, note)
       VALUES (${userId}, ${data.orderCode}, ${data.totalPrice}, ${data.note})
+      RETURNING id
     `
+    console.log('order', order)
     const orderId = order[0].id
+    console.log('orderId', orderId)
 
     // 創建訂單明細
     for (const item of data.items) {
@@ -41,6 +47,8 @@ export async function postOrderData(data: any) {
         WHERE name = ${item.name}
       `
       const productId = product[0].id
+      console.log('product', product)
+      console.log('productId', productId)
 
       await sql`
         INSERT INTO order_details (order_id, product_id, quantity)

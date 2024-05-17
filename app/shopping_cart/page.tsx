@@ -20,7 +20,11 @@ import {
 } from '@nextui-org/react'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { updateQuantity, removeFromCart } from '@/lib/features/cart/cartSlice'
+import {
+  updateQuantity,
+  removeFromCart,
+  clearCart
+} from '@/lib/features/cart/cartSlice'
 import { postOrderData } from '@/lib/data'
 
 const generateUavCode = (): string => {
@@ -55,8 +59,9 @@ const Page = () => {
   const [isDisabled, setIsDisabled] = useState(false)
   const [isCancelDisabled, setIsCancelDisabled] = useState(false)
   const [isSubmitSuccess, setIsSubmitSuccess] = useState(false)
+  const [isLoad, setIsLoad] = useState(false)
 
-  const handleSubmit = async (step: string) => {
+  const handleSubmit = async (step: string, func?: any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // 驗證email格式
     setIsCancelDisabled(false)
     setIsSubmitSuccess(false)
@@ -112,17 +117,39 @@ const Page = () => {
       }
       // api will be here
       try {
+        console.log('outputData', outputData)
+        setIsLoad(true)
         const response = await postOrderData(outputData)
         console.log('postOrderData response', response)
+        setIsLoad(false)
         setIsSubmitSuccess(true)
+        setIsCancelDisabled(true)
         setDisplayMsg('訂單已送出')
       } catch (error) {
         console.error('postOrderData error', error)
         setIsSubmitSuccess(false)
         setDisplayMsg('訂單送出失敗，請聯繫我們')
       }
+    }
 
-      setIsCancelDisabled(true)
+    // clear cart
+    if (step === 'clear') {
+      // reset all state
+      setName('')
+      setPhone('')
+      setEmail('')
+      setAddress('')
+      setPayment('')
+      setNote('')
+      setDisplayOrderCode('')
+      setDisplayMsg('')
+      setIsDisabled(false)
+      setIsCancelDisabled(false)
+      setIsSubmitSuccess(false)
+      setIsLoad(false)
+
+      dispatch(clearCart())
+      func()
     }
   }
 
@@ -203,6 +230,7 @@ const Page = () => {
             isRequired
             variant="faded"
             onChange={(e) => setName(e.target.value)}
+            value={name}
           />
           {/* 電話 */}
           <Input
@@ -212,6 +240,7 @@ const Page = () => {
             isRequired
             variant="faded"
             onChange={(e) => setPhone(e.target.value)}
+            value={phone}
           />
           {/* email */}
           <Input
@@ -220,6 +249,7 @@ const Page = () => {
             label="Email"
             variant="faded"
             onChange={(e) => setEmail(e.target.value)}
+            value={email}
           />
           {/* 地址 */}
           <Input
@@ -229,6 +259,7 @@ const Page = () => {
             isRequired
             variant="faded"
             onChange={(e) => setAddress(e.target.value)}
+            value={address}
           />
           {/* 匯款備註 */}
           <Input
@@ -238,6 +269,7 @@ const Page = () => {
             isRequired
             variant="faded"
             onChange={(e) => setPayment(e.target.value)}
+            value={payment}
           />
           {/* 備註 */}
           <Textarea
@@ -245,6 +277,7 @@ const Page = () => {
             label="備註"
             variant="faded"
             onChange={(e) => setNote(e.target.value)}
+            value={note}
           />
         </CardBody>
         <Divider />
@@ -294,9 +327,10 @@ const Page = () => {
                     <Button
                       color="success"
                       variant="light"
+                      isLoading={isLoad}
                       onPress={
                         isCancelDisabled
-                          ? onClose
+                          ? () => handleSubmit('clear', onClose)
                           : () => handleSubmit('submit')
                       }
                       isDisabled={isDisabled}
