@@ -145,6 +145,7 @@ const Page = () => {
                     />
                     <Button
                       color="danger"
+                      variant="ghost"
                       onClick={() =>
                         dispatch(removeFromCart({ name: item.name }))
                       }
@@ -232,6 +233,7 @@ const Page = () => {
         <CardFooter className="flex justify-end">
           <Button
             color="secondary"
+            variant="ghost"
             onClick={() => handleSubmit('check')}
             isDisabled={cart.length === 0}
           >
@@ -269,6 +271,7 @@ const Page = () => {
                     </Button>
                     <Button
                       color="success"
+                      variant="light"
                       onPress={
                         isCancelDisabled
                           ? onClose
