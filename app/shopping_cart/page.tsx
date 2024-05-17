@@ -100,7 +100,9 @@ const Page = () => {
         address: address,
         payment: payment,
         note: note,
-        orderCode: orderCode
+        orderCode: orderCode,
+        totalPrice: cart.reduce((acc, item) => acc + item.quantity, 0) * 600,
+        items: cart
       }
       // api will be here
       setDisplayMsg('訂單已送出')

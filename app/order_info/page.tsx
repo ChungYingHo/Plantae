@@ -39,6 +39,7 @@ const Page = () => {
             <div className="flex flex-col gap-3">
               <Input type="text" label="訂單編號" variant="faded" isReadOnly />
               <Input type="text" label="訂單狀態" variant="faded" isReadOnly />
+              <Input type="text" label="貨運單號" variant="faded" isReadOnly />
               <Input label="寄送日期" variant="faded" isReadOnly />
               <Input type="text" label="收件人" variant="faded" isReadOnly />
               <Input type="text" label="收件電話" variant="faded" isReadOnly />
