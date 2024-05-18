@@ -15,14 +15,18 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  useDisclosure
+  useDisclosure,
+  Select,
+  SelectItem
 } from '@nextui-org/react'
-import { getAllOrderData, deleteOrderData } from '@/lib/data'
+import { getAllOrderData, deleteOrderData, updateStatus } from '@/lib/data'
 
 function formatDate(isoDateString: string) {
   const date = new Date(isoDateString)
-  const formattedDate = date.toISOString().split('T')[0] // 2024-04-19
-  return formattedDate
+  const year = date.getFullYear()
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 const Page = () => {
@@ -30,19 +34,27 @@ const Page = () => {
   const [isDelete, setIsDelete] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [currentOrderId, setCurrentOrderId] = useState<number>(0)
+  const [currentOrderStatus, setCurrentOrderStatus] = useState<string>('')
+  const [currentOrderExpectDeliveryTime, setCurrentOrderExpectDeliveryTime] =
+    useState<string>('')
+  const [currentOrderDeliveryTime, setCurrentOrderDeliveryTime] =
+    useState<string>('')
+  const [currentOrderTrackingNumber, setCurrentOrderTrackingNumber] =
+    useState<string>('')
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllOrderData()
-        console.log('Get all order data response', response)
-        setOrderData(response)
-      } catch (error) {
-        console.error('Get all order data error', error)
-      }
+  const fetchData = async () => {
+    try {
+      const response = await getAllOrderData()
+      console.log('Get all order data response', response)
+      setOrderData(response)
+    } catch (error) {
+      console.error('Get all order data error', error)
     }
+  }
 
+  useEffect(() => {
     fetchData()
   }, [])
 
@@ -60,10 +72,53 @@ const Page = () => {
       console.log('Delete order data success')
       setIsLoading(false)
       // 重新取得訂單資料
+      fetchData()
 
       func()
     } catch (error) {
       console.error('Delete order data error', error)
+    }
+  }
+
+  // 編輯訂單
+  const handleAskEdit = (
+    id: number,
+    status: any,
+    deDate: any,
+    exDeDate: any,
+    trackNum: any
+  ) => {
+    setIsDelete(false)
+    onOpen()
+    setCurrentOrderId(id)
+    setCurrentOrderStatus(status)
+    setCurrentOrderExpectDeliveryTime(exDeDate)
+    setCurrentOrderDeliveryTime(deDate)
+    setCurrentOrderTrackingNumber(trackNum)
+  }
+
+  const handleEdit = async (func: any) => {
+    try {
+      const data = {
+        orderId: currentOrderId,
+        status: currentOrderStatus,
+        deliveryTime: currentOrderDeliveryTime,
+        expectDeliveryTime: currentOrderExpectDeliveryTime,
+        trackingNumber: currentOrderTrackingNumber
+      }
+
+      console.log('Edit order data', data)
+
+      setIsLoading(true)
+      await updateStatus(data)
+      console.log('Update order data success')
+      setIsLoading(false)
+      // 重新取得訂單資料
+      fetchData()
+
+      func()
+    } catch (error) {
+      console.error('Update order data error', error)
     }
   }
 
@@ -103,10 +158,10 @@ const Page = () => {
                 <CardBody>
                   <p className="mb-2 text-base">狀態：{order.status}</p>
                   <p className="mb-2 text-base">
-                    預計運送時間：{order.expect_delivery_time}
+                    預計運送時間：{formatDate(order.expect_delivery_time)}
                   </p>
                   <p className="mb-2 text-base">
-                    運送時間：{order.delivery_time}
+                    運送時間：{formatDate(order.delivery_time)}
                   </p>
                   <p className="mb-2 text-base">
                     貨運單號：
@@ -148,7 +203,20 @@ const Page = () => {
               >
                 刪除訂單
               </Button>
-              <Button color="primary">編輯訂單</Button>
+              <Button
+                color="primary"
+                onClick={() =>
+                  handleAskEdit(
+                    order.order_id,
+                    order.status,
+                    formatDate(order.delivery_time),
+                    formatDate(order.expect_delivery_time),
+                    order.tracking_number
+                  )
+                }
+              >
+                編輯訂單
+              </Button>
             </CardFooter>
           </Card>
         ))
@@ -160,10 +228,65 @@ const Page = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+                {isDelete ? '刪除訂單' : '編輯訂單'}
               </ModalHeader>
               <ModalBody>
-                {isDelete ? <p>確定刪除訂單?</p> : <p>Modal Body</p>}
+                {isDelete ? (
+                  <p>確定刪除訂單?</p>
+                ) : (
+                  <>
+                    <Select
+                      label="訂單狀態"
+                      className="max-w-xs"
+                      defaultSelectedKeys={[currentOrderStatus]}
+                      onChange={(e) => setCurrentOrderStatus(e.target.value)}
+                    >
+                      <SelectItem value="訂單處理中" key="訂單處理中">
+                        訂單處理中
+                      </SelectItem>
+                      <SelectItem value="備貨中" key="備貨中">
+                        備貨中
+                      </SelectItem>
+                      <SelectItem value="已出貨" key="已出貨">
+                        已出貨
+                      </SelectItem>
+                    </Select>
+                    <Input
+                      type="date"
+                      label="預計運送時間"
+                      value={currentOrderExpectDeliveryTime}
+                      onChange={(e) =>
+                        setCurrentOrderExpectDeliveryTime(
+                          new Date(e.target.value).toISOString().split('T')[0]
+                        )
+                      }
+                      isDisabled={
+                        currentOrderStatus === '訂單處理中' ||
+                        currentOrderStatus === '已出貨'
+                      }
+                    />
+                    <Input
+                      type="date"
+                      label="運送時間"
+                      value={currentOrderDeliveryTime}
+                      onChange={(e) =>
+                        setCurrentOrderDeliveryTime(
+                          new Date(e.target.value).toISOString().split('T')[0]
+                        )
+                      }
+                      isDisabled={currentOrderStatus !== '已出貨'}
+                    />
+                    <Input
+                      type="text"
+                      label="貨運單號"
+                      value={currentOrderTrackingNumber}
+                      onChange={(e) =>
+                        setCurrentOrderTrackingNumber(e.target.value)
+                      }
+                      isDisabled={currentOrderStatus !== '已出貨'}
+                    />
+                  </>
+                )}
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
@@ -176,7 +299,7 @@ const Page = () => {
                   onClick={
                     isDelete
                       ? () => handleDelete(currentOrderId, onClose)
-                      : onClose
+                      : () => handleEdit(onClose)
                   }
                 >
                   {isDelete ? '刪除' : '完成編輯'}

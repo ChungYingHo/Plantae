@@ -161,7 +161,7 @@ export async function updateStatus(data: any) {
       tracking_number = ${data.trackingNumber},
       delivery_time = ${data.deliveryTime},
       expect_delivery_time = ${data.expectDeliveryTime}
-      WHERE order_code = ${data.orderId}
+      WHERE id = ${data.orderId}
     `
     const response = 'success'
 

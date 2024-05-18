@@ -48,9 +48,9 @@ async function createTables(client) {
           order_code VARCHAR(255) NOT NULL UNIQUE,
           total_price INTEGER NOT NULL,
           status VARCHAR(255) NOT NULL DEFAULT '訂單處理中',
-          delivery_time TIMESTAMP,
-          expect_delivery_time TIMESTAMP,
-          tracking_number VARCHAR(255),
+          delivery_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          expect_delivery_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          tracking_number VARCHAR(255) DEFAULT '未出貨未有追蹤編號',
           note TEXT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
