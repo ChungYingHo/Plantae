@@ -27,6 +27,7 @@ const Page = () => {
   const [orderCode, setOrderCode] = useState('')
   const [isLoad, setIsLoad] = useState(false)
   const [searchData, setSearchData] = useState({})
+  const [displayMsg, setDisplayMsg] = useState('尚未有查詢資料')
 
   const handleSearch = async () => {
     try {
@@ -37,7 +38,9 @@ const Page = () => {
       console.log('response', response)
       setSearchData(response)
     } catch (error) {
+      setIsLoad(false)
       console.error('Search order error', error)
+      setDisplayMsg('查無此訂單貨系統異常，請聯絡植宇宙小編')
     }
   }
   return (
@@ -64,7 +67,7 @@ const Page = () => {
         <Divider />
         <CardBody>
           {!isSearch ? (
-            <p>尚未有查詢資料</p>
+            <p>{displayMsg}</p>
           ) : (
             <div className="flex flex-col gap-3">
               <Input

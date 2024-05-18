@@ -18,6 +18,7 @@ import {
   useDisclosure
 } from '@nextui-org/react'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { addToCart } from '@/lib/features/cart/cartSlice'
 
@@ -47,6 +48,7 @@ const products = [
 const Page = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const cart = useAppSelector((state) => state.cart.items)
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({})
   const [displayMsg, setDisplayMsg] = useState('')
@@ -71,6 +73,11 @@ const Page = () => {
     dispatch(addToCart({ name, quantity, unit }))
     console.log('addToCart:', { name, quantity, unit })
     onOpen()
+  }
+
+  const handleGoToCart = (func: any) => {
+    router.push('/shopping_cart')
+    func()
   }
 
   useEffect(() => {
@@ -142,11 +149,11 @@ const Page = () => {
                 </Button>
                 <Button
                   color="secondary"
-                  onPress={onClose}
+                  onPress={() => handleGoToCart(onClose)}
                   isDisabled={isDisabled}
                   variant="ghost"
                 >
-                  <Link href="/shopping_cart">前往購物車</Link>
+                  前往購物車
                 </Button>
               </ModalFooter>
             </>

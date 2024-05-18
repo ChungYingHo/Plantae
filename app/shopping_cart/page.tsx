@@ -26,6 +26,7 @@ import {
   clearCart
 } from '@/lib/features/cart/cartSlice'
 import { postOrderData } from '@/lib/data'
+import Rule from './components/Rule'
 
 const generateUavCode = (): string => {
   const today = new Date()
@@ -264,8 +265,8 @@ const Page = () => {
           {/* 匯款備註 */}
           <Input
             type="text"
-            placeholder="請填寫匯款後五碼"
-            label="匯款備註"
+            placeholder="ex: 12345 小明"
+            label="匯款後五碼以及姓名 (請務必填寫清楚)"
             isRequired
             variant="faded"
             onChange={(e) => setPayment(e.target.value)}
@@ -282,6 +283,7 @@ const Page = () => {
         </CardBody>
         <Divider />
         <CardFooter className="flex justify-end">
+          <Rule />
           <Button
             color="secondary"
             variant="ghost"
@@ -295,10 +297,21 @@ const Page = () => {
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1">
-                    <h2 className="text-lg font-bold">確認資料</h2>
-                    <p className="text-sm text-foreground-500">
-                      請確認以下資料是否正確
-                    </p>
+                    {isSubmitSuccess ? (
+                      <>
+                        <h2 className="text-lg font-bold">訂單已送出</h2>
+                        <p className="text-sm text-foreground-500">
+                          請複製訂單編號
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <h2 className="text-lg font-bold">確認資料</h2>
+                        <p className="text-sm text-foreground-500">
+                          請確認以下資料是否正確
+                        </p>
+                      </>
+                    )}
                   </ModalHeader>
                   <Divider />
                   <ModalBody>
