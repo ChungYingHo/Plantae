@@ -12,6 +12,7 @@ import {
   Button
 } from '@nextui-org/react'
 import { getSearchData } from '@/lib/data'
+import TrackLink from './components/TrackLink'
 
 function formatDate(isoDateString: string) {
   console.log('isoDateString', isoDateString)
@@ -55,14 +56,17 @@ const Page = () => {
             value={orderCode}
             onChange={(e) => setOrderCode(e.target.value)}
           />
-          <Button
-            color="secondary"
-            variant="ghost"
-            onClick={handleSearch}
-            isLoading={isLoad}
-          >
-            查詢
-          </Button>
+          <div className="flex items-end gap-3 lg:w-1/3">
+            <Button
+              color="secondary"
+              variant="ghost"
+              onClick={handleSearch}
+              isLoading={isLoad}
+            >
+              查詢
+            </Button>
+            <TrackLink />
+          </div>
         </CardHeader>
         <Divider />
         <CardBody>
@@ -105,8 +109,8 @@ const Page = () => {
                   label={
                     // @ts-ignore
                     searchData.userInfo.status === '已出貨'
-                      ? '送達時間'
-                      : '預計送達時間'
+                      ? '寄出時間'
+                      : '預計寄出時間'
                   }
                   variant="faded"
                   isReadOnly

@@ -29,7 +29,8 @@ const products = [
     area: '六甲區',
     color: 'success',
     img: '/product/black_mango.jpg',
-    description: 'This is the brand image website of PLANTAE Taiwan.',
+    description:
+      '帶有龍眼香氣的芒果品種，果肉細緻多汁。成熟時果皮不變色，建議摸起來微軟時即可食用。',
     unit: '10 斤/箱',
     price: '700 (含運費)'
   },
@@ -39,7 +40,7 @@ const products = [
     area: '六甲區',
     color: 'danger',
     img: '/product/love_mango.jpg',
-    description: 'This is the brand image website of PLANTAE Taiwan.',
+    description: '顆顆日曬在欉，堅持自然採收；粒粒豔紅色澤，果肉清甜可口。',
     unit: '10 斤/箱',
     price: '700 (含運費)'
   }
