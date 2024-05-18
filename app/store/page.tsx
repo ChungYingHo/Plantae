@@ -70,8 +70,8 @@ const Page = () => {
     } else {
       setDisplayMsg('加入購物車成功')
       setIsDisabled(false)
+      dispatch(addToCart({ name, quantity, unit }))
     }
-    dispatch(addToCart({ name, quantity, unit }))
     console.log('addToCart:', { name, quantity, unit })
     onOpen()
   }
