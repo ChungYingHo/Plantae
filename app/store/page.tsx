@@ -30,7 +30,7 @@ const products = [
     img: '/product/black_mango.jpg',
     description: 'This is the brand image website of PLANTAE Taiwan.',
     unit: '10 斤/箱',
-    price: '600 (含運費)'
+    price: '700 (含運費)'
   },
   {
     name: '愛文芒果',
@@ -40,7 +40,7 @@ const products = [
     img: '/product/love_mango.jpg',
     description: 'This is the brand image website of PLANTAE Taiwan.',
     unit: '10 斤/箱',
-    price: '600 (含運費)'
+    price: '700 (含運費)'
   }
 ]
 
@@ -80,7 +80,7 @@ const Page = () => {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-wrap gap-5 overflow-y-scroll bg-slate-50 px-8 py-5 text-foreground-800 xl:px-24 2xl:px-48">
       {products.map((product, index) => (
-        <Card key={index} className="h-fit w-1/3">
+        <Card key={index} className="h-fit w-full lg:w-1/3">
           <CardHeader>
             <Image
               src={product.img}
@@ -131,7 +131,7 @@ const Page = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+                {isDisabled ? '未選擇商品' : '加入購物車成功'}
               </ModalHeader>
               <ModalBody>
                 <p>{displayMsg}</p>

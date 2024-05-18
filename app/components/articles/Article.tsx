@@ -13,6 +13,7 @@ import {
   Button,
   useDisclosure
 } from '@nextui-org/react'
+import React from 'react'
 
 const articles = [
   {
@@ -64,7 +65,12 @@ const Article = () => {
           <Divider />
           <CardFooter>
             <Button onPress={handleOpen}>閱讀更多</Button>
-            <Modal size={size} isOpen={isOpen} onClose={onClose}>
+            <Modal
+              size={size}
+              isOpen={isOpen}
+              onClose={onClose}
+              scrollBehavior="inside"
+            >
               <ModalContent>
                 {(onClose) => (
                   <>

@@ -126,14 +126,14 @@ const Page = () => {
     <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-wrap gap-5 overflow-y-scroll bg-slate-50 px-8 py-5 text-foreground-800 xl:px-24 2xl:px-48">
       {orderData.length > 0 ? (
         orderData.map((order: any) => (
-          <Card key={order.order_id} className="w-full">
+          <Card key={order.order_id} className="h-fit w-full">
             <CardHeader className="flex flex-col items-start gap-1">
               <h4 className="text-base font-semibold">{order.order_code}</h4>
               <p className="text-sm">{formatDate(order.order_created_at)}</p>
             </CardHeader>
             <Divider />
-            <CardBody className="flex flex-row gap-3">
-              <Card className="w-1/3">
+            <CardBody className="flex flex-col gap-3 lg:flex-row">
+              <Card className="w-full lg:w-1/3">
                 <CardHeader>
                   <h5 className="text-base font-semibold">收件人資訊</h5>
                 </CardHeader>
@@ -151,7 +151,7 @@ const Page = () => {
                 </CardBody>
               </Card>
 
-              <Card className="w-1/3">
+              <Card className="w-full lg:w-1/3">
                 <CardHeader>
                   <h5 className="text-base font-semibold">訂單狀態</h5>
                 </CardHeader>
@@ -170,7 +170,7 @@ const Page = () => {
                 </CardBody>
               </Card>
 
-              <Card className="w-1/3">
+              <Card className="w-full lg:w-1/3">
                 <CardHeader>
                   <h5 className="text-base font-semibold">訂單商品</h5>
                 </CardHeader>

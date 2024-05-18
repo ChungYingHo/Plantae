@@ -112,7 +112,7 @@ const Page = () => {
         payment: payment,
         note: note,
         orderCode: orderCode,
-        totalPrice: cart.reduce((acc, item) => acc + item.quantity, 0) * 600,
+        totalPrice: cart.reduce((acc, item) => acc + item.quantity, 0) * 700,
         items: cart
       }
       // api will be here
@@ -154,7 +154,7 @@ const Page = () => {
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-col flex-wrap gap-5 overflow-x-hidden bg-slate-50 px-8 py-5 text-foreground-800 xl:px-24 2xl:px-48">
+    <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-col flex-wrap gap-5 overflow-x-hidden bg-slate-50 px-4 py-5 text-foreground-800 xl:px-24 2xl:px-48">
       <Card className="h-fit w-full p-5">
         <CardHeader className="flex w-full items-center justify-between">
           <h2 className="text-lg font-bold">訂單明細</h2>
@@ -163,12 +163,12 @@ const Page = () => {
           {cart.length > 0 ? (
             cart.map((item, index) => (
               <Card key={index} className="w-full">
-                <CardBody className="flex flex-row items-center justify-between">
+                <CardBody className="flex flex-col items-start justify-between lg:flex-row lg:items-center">
                   <div>
                     <h3 className="text-base font-bold">{item.name}</h3>
                     <p className="text-sm text-foreground-500">{item.unit}</p>
                   </div>
-                  <div className="flex w-1/2 items-center gap-3">
+                  <div className="flex w-full items-center gap-3 lg:w-1/2">
                     <Input
                       type="number"
                       label="數量"
@@ -211,7 +211,7 @@ const Page = () => {
             <CardFooter className="flex justify-end">
               <h2 className="text-lg font-bold">
                 總金額: $
-                {cart.reduce((acc, item) => acc + item.quantity, 0) * 600}
+                {cart.reduce((acc, item) => acc + item.quantity, 0) * 700}
               </h2>
             </CardFooter>
           </>

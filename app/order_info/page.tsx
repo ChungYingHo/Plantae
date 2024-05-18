@@ -13,6 +13,15 @@ import {
 } from '@nextui-org/react'
 import { getSearchData } from '@/lib/data'
 
+function formatDate(isoDateString: string) {
+  console.log('isoDateString', isoDateString)
+  const date = new Date(isoDateString)
+  const year = date.getFullYear()
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 const Page = () => {
   const [isSearch, setIsSearch] = useState(false)
   const [orderCode, setOrderCode] = useState('')
@@ -32,9 +41,9 @@ const Page = () => {
     }
   }
   return (
-    <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-wrap gap-5 overflow-y-scroll bg-slate-50 px-8 py-5 text-foreground-800 xl:px-24 2xl:px-48">
+    <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-wrap gap-5 overflow-y-scroll bg-slate-50 px-4 py-5 text-foreground-800 xl:px-24 2xl:px-48">
       <Card className="h-fit w-full p-5">
-        <CardHeader className="flex flex-row items-end gap-20">
+        <CardHeader className="flex flex-col gap-5 lg:flex-row lg:items-end lg:gap-20">
           <Input
             type="text"
             label="訂單編號"
@@ -89,6 +98,7 @@ const Page = () => {
               {/* @ts-ignore */}
               {searchData.userInfo.status !== '訂單處理中' && (
                 <Input
+                  type="date"
                   label={
                     // @ts-ignore
                     searchData.userInfo.status === '已出貨'
@@ -102,9 +112,9 @@ const Page = () => {
                     // @ts-ignore
                     searchData.userInfo.status === '已出貨'
                       ? // @ts-ignore
-                        searchData.userInfo.delivery_time
+                        formatDate(searchData.userInfo.delivery_time)
                       : // @ts-ignore
-                        searchData.userInfo.expect_delivery_time
+                        formatDate(searchData.userInfo.expect_delivery_time)
                   }
                 />
               )}
