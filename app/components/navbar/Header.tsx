@@ -31,7 +31,7 @@ export default function Header() {
   ]
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
@@ -110,7 +110,12 @@ export default function Header() {
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.name}-${index}`}>
-            <Link color="primary" className="w-full" href={item.href}>
+            <Link
+              color="primary"
+              className="w-full"
+              href={item.href}
+              onClick={() => setIsMenuOpen(false)}
+            >
               {item.name}
             </Link>
           </NavbarMenuItem>

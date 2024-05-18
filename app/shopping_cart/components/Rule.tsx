@@ -21,7 +21,6 @@ const Rule = () => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size="2xl"
-        defaultOpen={true}
         scrollBehavior="inside"
       >
         <ModalContent>
