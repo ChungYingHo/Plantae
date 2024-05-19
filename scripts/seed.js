@@ -79,14 +79,14 @@ async function insertProducts(client) {
       name: '愛文芒果',
       units: {
         name: '箱 / 10斤',
-        price: 600
+        price: 700
       }
     },
     {
       name: '黑香芒果',
       units: {
         name: '箱 / 10斤',
-        price: 600
+        price: 700
       }
     }
   ]
