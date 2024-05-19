@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="overflow-x-hidden light">
-      <body>
+      <body className="text-slate-800">
         <StoreProvider>
           <Providers>
             <Header />

@@ -47,7 +47,7 @@ export default function Header() {
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         <NavbarItem>
           <Link
-            className={`${pathname === '/' ? 'text-lime-500' : 'text-foreground'}`}
+            className={`${pathname === '/' ? 'text-lime-600' : 'text-foreground'}`}
             href="/"
           >
             主頁
