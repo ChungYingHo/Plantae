@@ -32,7 +32,8 @@ const products = [
     description:
       '帶有龍眼香氣的芒果品種，果肉細緻多汁。成熟時果皮不變色，建議摸起來微軟時即可食用。',
     unit: '10 斤/箱',
-    price: '700 (含運費)'
+    price: '700 (含運費)',
+    date: '5月底、6月初陸續出貨'
   },
   {
     name: '愛文芒果',
@@ -42,7 +43,8 @@ const products = [
     img: '/product/love_mango.jpg',
     description: '顆顆日曬在欉，堅持自然採收；粒粒豔紅色澤，果肉清甜可口。',
     unit: '10 斤/箱',
-    price: '700 (含運費)'
+    price: '700 (含運費)',
+    date: '6月中旬陸續出貨'
   }
 ]
 
@@ -105,10 +107,15 @@ const Page = () => {
             <p className="mb-3 text-sm font-bold text-slate-600">
               {product.description}
             </p>
-            <p className="text-sm text-slate-500">生產者: {product.producer}</p>
-            <p className="text-sm text-slate-500">產地: {product.area}</p>
-            <p className="text-sm text-slate-500">單位: {product.unit}</p>
-            <p className="text-sm text-slate-500">價格: {product.price}</p>
+            <p className="mb-1 text-sm text-slate-500">
+              生產者: {product.producer}
+            </p>
+            <p className="mb-1 text-sm text-slate-500">產地: {product.area}</p>
+            <p className="mb-1 text-sm text-slate-500">單位: {product.unit}</p>
+            <p className="mb-1 text-sm text-slate-500">價格: {product.price}</p>
+            <p className="text-sm text-slate-500">
+              預計出貨時間: {product.date}
+            </p>
           </CardBody>
           <CardFooter className="flex items-end justify-between gap-5">
             <Input
