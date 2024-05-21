@@ -17,9 +17,12 @@ import {
   ModalFooter,
   useDisclosure,
   Select,
-  SelectItem
+  SelectItem,
+  Tabs,
+  Tab
 } from '@nextui-org/react'
 import { getAllOrderData, deleteOrderData, updateStatus } from '@/lib/data'
+import OrderCard from './components/OrderCard'
 
 function formatDate(isoDateString: string) {
   const date = new Date(isoDateString)
@@ -41,6 +44,9 @@ const Page = () => {
     useState<string>('')
   const [currentOrderTrackingNumber, setCurrentOrderTrackingNumber] =
     useState<string>('')
+  const [preOrderData, setPreOrderData] = useState<any[]>([])
+  const [preSendOrderData, setPreSendOrderData] = useState<any[]>([])
+  const [sendOrderData, setSendOrderData] = useState<any[]>([])
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
@@ -49,6 +55,9 @@ const Page = () => {
       const response = await getAllOrderData()
       console.log('Get all order data response', response)
       setOrderData(response)
+      setPreOrderData(response.filter((order) => order.status === '訂單處理中'))
+      setPreSendOrderData(response.filter((order) => order.status === '備貨中'))
+      setSendOrderData(response.filter((order) => order.status === '已出貨'))
     } catch (error) {
       console.error('Get all order data error', error)
     }
@@ -123,107 +132,63 @@ const Page = () => {
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-wrap gap-5 overflow-y-scroll bg-slate-50 px-8 py-5 text-foreground-800 xl:px-24 2xl:px-48">
-      {orderData.length > 0 ? (
-        orderData.map((order: any) => (
-          <Card key={order.order_id} className="h-fit w-full">
-            <CardHeader className="flex flex-col items-start gap-1">
-              <h4 className="text-base font-semibold">{order.order_code}</h4>
-              <p className="text-sm">{formatDate(order.order_created_at)}</p>
-            </CardHeader>
-            <Divider />
-            <CardBody className="flex flex-col gap-3 lg:flex-row">
-              <Card className="w-full lg:w-1/3">
-                <CardHeader>
-                  <h5 className="text-base font-semibold">收件人資訊</h5>
-                </CardHeader>
-                <CardBody>
-                  <p className="mb-2 text-base">姓名：{order.user_name}</p>
-                  <p className="mb-2 text-base">電話：{order.user_phone}</p>
-                  <p className="mb-2 text-base">
-                    Email：{order.user_email ? order.user_email : '未提供'}
-                  </p>
-                  <p className="mb-2 text-base">地址：{order.user_address}</p>
-                  <p className="mb-2 text-base">匯款：{order.user_payment}</p>
-                  <p className="mb-2 text-base">
-                    備註：{order.note ? order.note : '未提供'}
-                  </p>
-                </CardBody>
-              </Card>
+    <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-col flex-wrap gap-5 overflow-y-scroll bg-slate-50 px-8 py-5 text-foreground-800 xl:px-24 2xl:px-48">
+      <Tabs>
+        <Tab key="total" title="全部訂單">
+          <p className="mb-5">訂單總數：{orderData.length}</p>
+          {orderData.length > 0 ? (
+            <OrderCard
+              orderData={orderData}
+              handleAskDelete={handleAskDelete}
+              handleAskEdit={handleAskEdit}
+            />
+          ) : (
+            <p>目前沒有訂單數據</p>
+          )}
+        </Tab>
+        <Tab key="pre" title="訂單處理中">
+          <p className="mb-5">未確認訂單總數：{preOrderData.length}</p>
+          {preOrderData.length > 0 ? (
+            <OrderCard
+              orderData={preOrderData}
+              handleAskDelete={handleAskDelete}
+              handleAskEdit={handleAskEdit}
+            />
+          ) : (
+            <p>目前沒有訂單處理中</p>
+          )}
+        </Tab>
+        <Tab key="preSend" title="備貨中">
+          <p className="mb-5">備貨中訂單總數：{preSendOrderData.length}</p>
+          {preSendOrderData.length > 0 ? (
+            <OrderCard
+              orderData={preSendOrderData}
+              handleAskDelete={handleAskDelete}
+              handleAskEdit={handleAskEdit}
+            />
+          ) : (
+            <p>目前沒有備貨中</p>
+          )}
+        </Tab>
+        <Tab key="send" title="已出貨">
+          <p className="mb-5">已出貨訂單總數：{sendOrderData.length}</p>
+          {sendOrderData.length > 0 ? (
+            <OrderCard
+              orderData={sendOrderData}
+              handleAskDelete={handleAskDelete}
+              handleAskEdit={handleAskEdit}
+            />
+          ) : (
+            <p>目前沒有已出貨</p>
+          )}
+        </Tab>
+      </Tabs>
 
-              <Card className="w-full lg:w-1/3">
-                <CardHeader>
-                  <h5 className="text-base font-semibold">訂單狀態</h5>
-                </CardHeader>
-                <CardBody>
-                  <p className="mb-2 text-base">狀態：{order.status}</p>
-                  <p className="mb-2 text-base">
-                    預計運送時間：{formatDate(order.expect_delivery_time)}
-                  </p>
-                  <p className="mb-2 text-base">
-                    運送時間：{formatDate(order.delivery_time)}
-                  </p>
-                  <p className="mb-2 text-base">
-                    貨運單號：
-                    {order.tracking_number ? order.tracking_number : '未提供'}
-                  </p>
-                </CardBody>
-              </Card>
-
-              <Card className="w-full lg:w-1/3">
-                <CardHeader>
-                  <h5 className="text-base font-semibold">訂單商品</h5>
-                </CardHeader>
-                <CardBody>
-                  <ul>
-                    {order.product_names.map((product: any, pIndex: any) => (
-                      <li key={pIndex}>
-                        ({pIndex + 1}) {product}{' '}
-                        {order.product_quantities[pIndex]}{' '}
-                        {order.product_units[pIndex]}
-                      </li>
-                    ))}
-                  </ul>
-                </CardBody>
-                <Divider />
-                <CardFooter>
-                  <p className="mb-2 text-base">
-                    總價：
-                    {order.total_price}
-                  </p>
-                </CardFooter>
-              </Card>
-            </CardBody>
-            <Divider />
-            <CardFooter>
-              <Button
-                color="danger"
-                className="mr-5"
-                onClick={() => handleAskDelete(order.order_id)}
-              >
-                刪除訂單
-              </Button>
-              <Button
-                color="primary"
-                onClick={() =>
-                  handleAskEdit(
-                    order.order_id,
-                    order.status,
-                    formatDate(order.delivery_time),
-                    formatDate(order.expect_delivery_time),
-                    order.tracking_number
-                  )
-                }
-              >
-                編輯訂單
-              </Button>
-            </CardFooter>
-          </Card>
-        ))
-      ) : (
-        <p>目前沒有訂單數據</p>
-      )}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        scrollBehavior="inside"
+      >
         <ModalContent>
           {(onClose) => (
             <>

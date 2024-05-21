@@ -28,7 +28,9 @@ const Page = () => {
   const [orderCode, setOrderCode] = useState('')
   const [isLoad, setIsLoad] = useState(false)
   const [searchData, setSearchData] = useState({})
-  const [displayMsg, setDisplayMsg] = useState('尚未有查詢資料')
+  const [displayMsg, setDisplayMsg] = useState(
+    '尚未有查詢資料。如您遺忘訂單編號，請至植宇宙粉專聯絡小編~'
+  )
 
   const handleSearch = async () => {
     try {
@@ -110,7 +112,7 @@ const Page = () => {
                     // @ts-ignore
                     searchData.userInfo.status === '已出貨'
                       ? '寄出時間'
-                      : '預計寄出時間'
+                      : '預計開始寄出時間 (起)'
                   }
                   variant="faded"
                   isReadOnly

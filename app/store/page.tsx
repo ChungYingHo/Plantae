@@ -121,11 +121,10 @@ const Page = () => {
             <Input
               type="number"
               label="數量"
-              placeholder="0"
               labelPlacement="outside"
               min="0"
               className="w-2/3"
-              value={(quantities[product.name] || 0).toString()} // Convert the number value to a string
+              value={(quantities[product.name] || '').toString()} // Convert the number value to a string
               onChange={(e) =>
                 handleQuantityChange(product.name, parseInt(e.target.value))
               }
