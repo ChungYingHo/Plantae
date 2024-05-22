@@ -5,7 +5,8 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure
+  useDisclosure,
+  Snippet
 } from '@nextui-org/react'
 
 const Rule = () => {
@@ -46,7 +47,10 @@ const Rule = () => {
                   <li>1. 目前支付方式為匯款，並採先匯款先出貨制。</li>
                   <li>
                     2. 植宇宙匯款帳號為：
-                    <span className="text-lime-600">822-358540783380</span>。
+                    <Snippet className="text-lime-600" size="sm" symbol="">
+                      822-358540783380
+                    </Snippet>
+                    。
                   </li>
                   <li>
                     3.

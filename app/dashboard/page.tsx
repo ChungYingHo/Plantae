@@ -3,11 +3,6 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  Divider,
-  CardFooter,
   Input,
   Button,
   Modal,
@@ -21,16 +16,13 @@ import {
   Tabs,
   Tab
 } from '@nextui-org/react'
-import { getAllOrderData, deleteOrderData, updateStatus } from '@/lib/data'
+import {
+  getAllOrderData,
+  deleteOrderData,
+  updateStatus,
+  getProductQuantity
+} from '@/lib/data'
 import OrderCard from './components/OrderCard'
-
-function formatDate(isoDateString: string) {
-  const date = new Date(isoDateString)
-  const year = date.getFullYear()
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const day = date.getDate().toString().padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
 
 const Page = () => {
   const [orderData, setOrderData] = useState<any[]>([])
@@ -47,17 +39,23 @@ const Page = () => {
   const [preOrderData, setPreOrderData] = useState<any[]>([])
   const [preSendOrderData, setPreSendOrderData] = useState<any[]>([])
   const [sendOrderData, setSendOrderData] = useState<any[]>([])
+  const [productQuantity, setProductQuantity] = useState<any[]>([])
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const fetchData = async () => {
     try {
       const response = await getAllOrderData()
+      const quantityResponse = await getProductQuantity()
+
       console.log('Get all order data response', response)
+      console.log('Get all product quantity response', quantityResponse)
+
       setOrderData(response)
       setPreOrderData(response.filter((order) => order.status === '訂單處理中'))
       setPreSendOrderData(response.filter((order) => order.status === '備貨中'))
       setSendOrderData(response.filter((order) => order.status === '已出貨'))
+      setProductQuantity(quantityResponse)
     } catch (error) {
       console.error('Get all order data error', error)
     }
@@ -180,6 +178,24 @@ const Page = () => {
             />
           ) : (
             <p>目前沒有已出貨</p>
+          )}
+        </Tab>
+        <Tab key="product" title="商品數量">
+          {productQuantity.length > 0 ? (
+            <>
+              {productQuantity.map((product) => (
+                <Input
+                  key={product.name}
+                  type="text"
+                  label={product.name}
+                  value={product.quantity}
+                  isReadOnly
+                  className="mb-5"
+                />
+              ))}
+            </>
+          ) : (
+            <p>目前沒有商品數量</p>
           )}
         </Tab>
       </Tabs>

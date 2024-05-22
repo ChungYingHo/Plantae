@@ -208,3 +208,24 @@ export async function deleteOrderData(orderId: number) {
     throw new Error('Delete order error')
   }
 }
+
+// get the quality of the product from the database
+export async function getProductQuantity() {
+  try {
+    const { rows: products } = await sql`
+      SELECT
+        products.name,
+        SUM(order_details.quantity) AS quantity
+      FROM products
+      JOIN order_details ON products.id = order_details.product_id
+      GROUP BY products.name
+    `
+
+    const response = products
+
+    return response
+  } catch (error) {
+    console.error('Get product quantity error', error)
+    throw new Error('Get product quantity error')
+  }
+}
