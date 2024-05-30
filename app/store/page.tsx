@@ -33,7 +33,7 @@ const products = [
       '帶有龍眼香氣的芒果品種，果肉細緻多汁。成熟時果皮不變色，建議摸起來微軟時即可食用。',
     unit: '10 斤/箱',
     price: '700 (含運費)',
-    date: '5月底、6月初陸續出貨'
+    date: '6月初陸續出貨'
   },
   {
     name: '愛文芒果',
@@ -111,10 +111,15 @@ const Page = () => {
               生產者: {product.producer}
             </p>
             <p className="mb-1 text-sm text-slate-500">產地: {product.area}</p>
-            <p className="mb-1 text-sm text-slate-500">單位: {product.unit}</p>
-            <p className="mb-1 text-sm text-slate-500">價格: {product.price}</p>
-            <p className="text-sm text-slate-500">
+
+            {/* <p className="mb-1 text-sm text-slate-500">單位: {product.unit}</p>
+            <p className="mb-1 text-sm text-slate-500">價格: {product.price}</p> */}
+            <p className="mb-1 text-sm text-slate-500 ">
               預計出貨時間: {product.date}
+            </p>
+            <p className="text-sm text-pink-500">
+              感謝各位大力支持，2024 芒果已預購結束~
+              今年錯過的朋友們可以期待一下明年囉！
             </p>
           </CardBody>
           <CardFooter className="flex items-end justify-between gap-5">
@@ -128,12 +133,14 @@ const Page = () => {
               onChange={(e) =>
                 handleQuantityChange(product.name, parseInt(e.target.value))
               }
+              isDisabled
             />
             <Button
               color="secondary"
               className="w-1/3"
               variant="ghost"
               onPress={() => handleAddToCart(product.name, product.unit)}
+              isDisabled
             >
               加入購物車
             </Button>
