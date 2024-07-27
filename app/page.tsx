@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import MainPage from './components/main/MainPage'
-import Article from './components/articles/Article'
+import Article from './components/article/Article'
 
 const numShadows = 700
 
@@ -37,6 +37,14 @@ export default function Home() {
     }
   }
 
+  // 載入頁面時，若 localStorage 存在 isBackFromArticle，則直接滾動到第二個 div並將 isBackFromArticle 改為 false
+  useEffect(() => {
+    if (localStorage.getItem('isBackFromArticle') === 'true') {
+      scrollToSecondDiv()
+      localStorage.setItem('isBackFromArticle', 'false')
+    }
+  })
+
   return (
     <main className="w-screen overflow-y-scroll bg-slate-50 text-foreground-800 2xl:h-[calc(100vh-4rem)] 2xl:snap-y 2xl:snap-mandatory">
       <div className="flex min-h-[calc(100vh-4rem)] w-full items-center justify-center bg-slate-50 px-8 xl:px-24 2xl:h-[calc(100vh-4rem)] 2xl:snap-center 2xl:px-48">
@@ -46,8 +54,10 @@ export default function Home() {
         />
         <MainPage scrollToSecondDiv={scrollToSecondDiv} />
       </div>
+
       <div
         ref={secondDivRef}
+        id="modal-root"
         className="my-7 flex min-h-[calc(100vh-4rem)] w-full items-center bg-slate-50 px-8 xl:px-24 2xl:my-0 2xl:snap-start 2xl:px-48"
       >
         <Article />
