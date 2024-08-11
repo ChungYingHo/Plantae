@@ -158,10 +158,13 @@ const Page = () => {
   let totalPrice = 0
   // first product price is 700, second product price is 1320
   if (cart.length > 0) {
-    totalPrice += cart[0].quantity * 700
-    if (cart.length > 1) {
-      totalPrice += cart[1].quantity * 1320
-    }
+    cart.forEach((item) => {
+      if (item.name === '老欉麻豆文旦-10斤') {
+        totalPrice += item.quantity * 700
+      } else if (item.name === '老欉麻豆文旦-20斤') {
+        totalPrice += item.quantity * 1320
+      }
+    })
   }
   return (
     <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-col flex-wrap gap-5 overflow-x-hidden bg-slate-50 px-4 py-5 text-foreground-800 xl:px-24 2xl:px-48">
