@@ -4,18 +4,7 @@ import {
   CardBody,
   Divider,
   CardFooter,
-  Input,
-  Button,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-  Select,
-  SelectItem,
-  Tabs,
-  Tab
+  Button
 } from '@nextui-org/react'
 
 function formatDate(isoDateString: string) {
@@ -63,15 +52,17 @@ const OrderCard = ({ orderData, handleAskDelete, handleAskEdit }) => {
               <CardBody>
                 <p className="mb-2 text-base">狀態：{order.status}</p>
                 <p className="mb-2 text-base">
-                  預計運送時間：{formatDate(order.expect_delivery_time)}
+                  預計運送時間：2024-09-03
+                  {/* {formatDate(order.expect_delivery_time)} */}
                 </p>
                 <p className="mb-2 text-base">
                   運送時間：{formatDate(order.delivery_time)}
                 </p>
-                <p className="mb-2 text-base">
+                {/* note 柚子沒有貨運單號 */}
+                {/* <p className="mb-2 text-base">
                   貨運單號：
                   {order.tracking_number ? order.tracking_number : '未提供'}
-                </p>
+                </p> */}
               </CardBody>
             </Card>
 

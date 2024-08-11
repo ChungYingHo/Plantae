@@ -76,17 +76,17 @@ async function createTables(client) {
 async function insertProducts(client) {
   const productData = [
     {
-      name: '愛文芒果',
+      name: '老欉麻豆文旦-10斤',
       units: {
         name: '箱 / 10斤',
         price: 700
       }
     },
     {
-      name: '黑香芒果',
+      name: '老欉麻豆文旦-20斤',
       units: {
-        name: '箱 / 10斤',
-        price: 700
+        name: '箱 / 20斤',
+        price: 1320
       }
     }
   ]

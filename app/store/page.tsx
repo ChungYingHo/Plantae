@@ -24,27 +24,28 @@ import { addToCart } from '@/lib/features/cart/cartSlice'
 
 const products = [
   {
-    name: '黑香芒果',
-    producer: '何春龍',
-    area: '六甲區',
+    name: '老欉麻豆文旦-10斤',
+    producer: '陳丁壆',
+    area: '麻豆區',
     color: 'success',
-    img: '/product/black_mango.jpg',
+    img: '/product/pomelo-10.jpg',
     description:
-      '帶有龍眼香氣的芒果品種，果肉細緻多汁。成熟時果皮不變色，建議摸起來微軟時即可食用。',
+      '老欉文旦為柚子中的珍品，果皮薄而易剝，果肉緊實多汁，甜中帶酸，香氣四溢。在地種植獨一無二的香甜風味與細膩口感。',
     unit: '10 斤/箱',
-    price: '700 (含運費)',
-    date: '6月初陸續出貨'
+    price: '700 (本島含運費)',
+    date: '9/3 起陸續出貨'
   },
   {
-    name: '愛文芒果',
-    producer: '何春龍',
-    area: '六甲區',
+    name: '老欉麻豆文旦-20斤',
+    producer: '陳丁壆',
+    area: '麻豆區',
     color: 'danger',
-    img: '/product/love_mango.jpg',
-    description: '顆顆日曬在欉，堅持自然採收；粒粒豔紅色澤，果肉清甜可口。',
-    unit: '10 斤/箱',
-    price: '700 (含運費)',
-    date: '6月中旬陸續出貨'
+    img: '/product/pomelo-20.jpg',
+    description:
+      '老欉柚樹歷經歲月洗禮，結出的果實更加醇厚飽滿。而20斤裝文旦更是節日送禮、公司行號的不二之選。',
+    unit: '20 斤/箱',
+    price: '1320 (本島含運費)',
+    date: '9/3 起陸續出貨'
   }
 ]
 
@@ -95,7 +96,7 @@ const Page = () => {
             <Image
               src={product.img}
               alt={product.name}
-              className="mx-auto w-[80%] object-contain"
+              className="mx-auto aspect-square w-[80%] object-contain"
             />
           </CardHeader>
           <Divider />
@@ -117,10 +118,13 @@ const Page = () => {
             <p className="mb-1 text-sm text-slate-500 ">
               預計出貨時間: {product.date}
             </p>
-            <p className="text-sm text-pink-500">
+            <p className="mb-1 text-sm text-slate-500 ">
+              售價: {product.price}
+            </p>
+            {/* <p className="text-sm text-pink-500">
               感謝各位大力支持，2024 芒果已預購結束~
               今年錯過的朋友們可以期待一下明年囉！
-            </p>
+            </p> */}
           </CardBody>
           <CardFooter className="flex items-end justify-between gap-5">
             <Input
@@ -133,14 +137,12 @@ const Page = () => {
               onChange={(e) =>
                 handleQuantityChange(product.name, parseInt(e.target.value))
               }
-              isDisabled
             />
             <Button
               color="secondary"
               className="w-1/3"
               variant="ghost"
               onPress={() => handleAddToCart(product.name, product.unit)}
-              isDisabled
             >
               加入購物車
             </Button>

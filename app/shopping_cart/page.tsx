@@ -39,7 +39,7 @@ const generateUavCode = (): string => {
     randomStr += chars[randomIndex]
   }
 
-  return `plantae${dateStr}-${randomStr}`
+  return `${dateStr}-${randomStr}`
 }
 
 const Page = () => {
@@ -113,7 +113,7 @@ const Page = () => {
         payment: payment,
         note: note,
         orderCode: orderCode,
-        totalPrice: cart.reduce((acc, item) => acc + item.quantity, 0) * 700,
+        totalPrice: totalPrice,
         items: cart
       }
       // api will be here
@@ -154,6 +154,15 @@ const Page = () => {
     }
   }
 
+  // note calculate total price
+  let totalPrice = 0
+  // first product price is 700, second product price is 1320
+  if (cart.length > 0) {
+    totalPrice += cart[0].quantity * 700
+    if (cart.length > 1) {
+      totalPrice += cart[1].quantity * 1320
+    }
+  }
   return (
     <main className="flex min-h-[calc(100vh-4rem)] w-screen flex-col flex-wrap gap-5 overflow-x-hidden bg-slate-50 px-4 py-5 text-foreground-800 xl:px-24 2xl:px-48">
       <Card className="h-fit w-full p-5">
@@ -211,8 +220,7 @@ const Page = () => {
             <Divider />
             <CardFooter className="flex justify-end">
               <h2 className="text-lg font-bold">
-                總金額: $
-                {cart.reduce((acc, item) => acc + item.quantity, 0) * 700}
+                總金額: $ {totalPrice.toLocaleString()}
               </h2>
             </CardFooter>
           </>

@@ -67,7 +67,8 @@ const Page = () => {
             >
               查詢
             </Button>
-            <TrackLink />
+            {/* note 柚子沒有貨運單號 */}
+            {/* <TrackLink /> */}
           </div>
         </CardHeader>
         <Divider />
@@ -92,8 +93,9 @@ const Page = () => {
                 // @ts-ignore
                 value={searchData.userInfo.status}
               />
+              {/* note 柚子沒有貨運單號 */}
               {/* @ts-ignore */}
-              {searchData.userInfo.status === '已出貨' && (
+              {/* {searchData.userInfo.status === '已出貨' && (
                 <Input
                   type="text"
                   label="貨運單號"
@@ -102,7 +104,7 @@ const Page = () => {
                   // @ts-ignore
                   value={searchData.userInfo.tracking_number}
                 />
-              )}
+              )} */}
 
               {/* @ts-ignore */}
               {searchData.userInfo.status !== '訂單處理中' && (
@@ -123,7 +125,7 @@ const Page = () => {
                       ? // @ts-ignore
                         formatDate(searchData.userInfo.delivery_time)
                       : // @ts-ignore
-                        formatDate(searchData.userInfo.expect_delivery_time)
+                        '2024-09-03'
                   }
                 />
               )}

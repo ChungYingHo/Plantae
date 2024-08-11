@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import {
   Input,
@@ -232,7 +231,7 @@ const Page = () => {
                         已出貨
                       </SelectItem>
                     </Select>
-                    <Input
+                    {/* <Input
                       type="date"
                       label="預計運送時間"
                       value={currentOrderExpectDeliveryTime}
@@ -245,7 +244,7 @@ const Page = () => {
                         currentOrderStatus === '訂單處理中' ||
                         currentOrderStatus === '已出貨'
                       }
-                    />
+                    /> */}
                     <Input
                       type="date"
                       label="運送時間"
@@ -257,7 +256,8 @@ const Page = () => {
                       }
                       isDisabled={currentOrderStatus !== '已出貨'}
                     />
-                    <Input
+                    {/* note 柚子沒有貨運單號 */}
+                    {/* <Input
                       type="text"
                       label="貨運單號"
                       value={currentOrderTrackingNumber}
@@ -265,7 +265,7 @@ const Page = () => {
                         setCurrentOrderTrackingNumber(e.target.value)
                       }
                       isDisabled={currentOrderStatus !== '已出貨'}
-                    />
+                    /> */}
                   </>
                 )}
               </ModalBody>
