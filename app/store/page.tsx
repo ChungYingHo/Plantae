@@ -121,10 +121,10 @@ const Page = () => {
             <p className="mb-1 text-sm text-slate-500 ">
               售價: {product.price}
             </p>
-            {/* <p className="text-sm text-pink-500">
-              感謝各位大力支持，2024 芒果已預購結束~
+            <p className="text-sm text-pink-500">
+              感謝各位大力支持，2024 文旦已預購結束~
               今年錯過的朋友們可以期待一下明年囉！
-            </p> */}
+            </p>
           </CardBody>
           <CardFooter className="flex items-end justify-between gap-5">
             <Input
@@ -133,6 +133,7 @@ const Page = () => {
               labelPlacement="outside"
               min="0"
               className="w-2/3"
+              isDisabled
               value={(quantities[product.name] || '').toString()} // Convert the number value to a string
               onChange={(e) =>
                 handleQuantityChange(product.name, parseInt(e.target.value))
@@ -141,6 +142,7 @@ const Page = () => {
             <Button
               color="secondary"
               className="w-1/3"
+              isDisabled
               variant="ghost"
               onPress={() => handleAddToCart(product.name, product.unit)}
             >
